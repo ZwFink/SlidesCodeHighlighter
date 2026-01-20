@@ -185,6 +185,17 @@ export function OutputToolbar() {
             </select>
           </div>
         </label>
+
+        <label className={styles.checkboxLabel}>
+          <input
+            type="checkbox"
+            checked={config.showLineNumbers}
+            onChange={(ev) =>
+              updateConfig({ showLineNumbers: ev.currentTarget.checked })
+            }
+          />
+          <span>Line numbers</span>
+        </label>
       </div>
     </>
   );

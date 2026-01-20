@@ -155,11 +155,38 @@ async function codeToHighlightedPre(
     })
     .replace(/<\/?(pre|code).*?>/g, "");
 
+  if (config.showLineNumbers) {
+    injectLineNumbers(pre, theme);
+  }
+
   if (config.selectionTreatment && appState.selections.length) {
     highlightSelection(pre, theme, config, appState);
   }
 
   return pre;
+}
+
+function injectLineNumbers(
+  pre: HTMLPreElement,
+  theme: shiki.ThemeRegistration
+) {
+  const lines = pre.querySelectorAll('.line');
+  const digitCount = String(lines.length).length;
+  const colors = theme.colors || {};
+  const lineNumColor = colors["editorLineNumber.foreground"] ||
+    tinycolor.mix(
+      colors["editor.foreground"] || colors["foreground"] || "#888",
+      colors["editor.background"] || "#fff",
+      60
+    ).toRgbString();
+
+  lines.forEach((line, index) => {
+    const lineNum = document.createElement('span');
+    lineNum.className = 'line-number';
+    lineNum.style.color = lineNumColor;
+    lineNum.textContent = String(index + 1).padStart(digitCount, ' ') + '  ';
+    line.insertBefore(lineNum, line.firstChild);
+  });
 }
 
 function highlightSelection(

@@ -131,4 +131,51 @@
   select {
     cursor: pointer;
   }
+
+  .checkboxLabel {
+    cursor: pointer;
+    padding: 8px 12px;
+    background-color: lib.material-color('blue-grey', '600');
+    border-radius: 4px;
+    gap: 8px;
+    white-space: nowrap;
+
+    > span {
+      position: static;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(#fff, .6);
+      border-radius: 3px;
+      background-color: transparent;
+      cursor: pointer;
+      position: relative;
+
+      &:checked {
+        background-color: lib.material-color('blue', '500');
+        border-color: lib.material-color('blue', '500');
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 4px;
+          top: 1px;
+          width: 4px;
+          height: 8px;
+          border: solid #fff;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+      }
+    }
+
+    &:hover {
+      background-color: lib.material-color('blue-grey', '500');
+    }
+  }
 }

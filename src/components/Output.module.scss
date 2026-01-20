@@ -61,4 +61,10 @@
       }
     }
   }
+
+  :global(.line-number) {
+    color: var(--line-number-color, rgba(128, 128, 128, 0.6));
+    font-variant-numeric: tabular-nums;
+    user-select: text;
+  }
 }
