@@ -32,6 +32,7 @@ export interface Config {
   typeSize: number;
   theme: ThemeName;
   selectionTreatment: "none" | "focus" | "bold" | "highlight";
+  showLineNumbers: boolean;
   lang?: string;
   customTheme?: LegacyTheme | VscTheme;
 }
@@ -42,6 +43,7 @@ const DEFAULT_CONFIG: Config = {
   tabSize: 4,
   typeSize: 40,
   selectionTreatment: "focus",
+  showLineNumbers: false,
   theme: "light",
 };
 
@@ -73,6 +75,8 @@ export function useConfig(): [Config, (updates: Partial<Config>) => void] {
         if ("selectionTreatment" in updates)
           localStorage.highlighterSelectionTreatment =
             updates.selectionTreatment;
+        if ("showLineNumbers" in updates)
+          localStorage.highlighterShowLineNumbers = updates.showLineNumbers ? '1' : '0';
         if ("customTheme" in updates)
           localStorage.customTheme = JSON.stringify(updates.customTheme);
 
@@ -96,6 +100,7 @@ export function useConfig(): [Config, (updates: Partial<Config>) => void] {
         p.set("tab", String(newConfig.tabSize));
         p.set("size", String(newConfig.typeSize));
         p.set("sel", newConfig.selectionTreatment);
+        if (newConfig.showLineNumbers) p.set("ln", "1");
         window.history.replaceState("", "", "?" + p.toString());
       }
       return newConfig;
@@ -129,6 +134,8 @@ export function ConfigWrapper({ children }: PropsWithChildren) {
       config.typeSize = Number(localStorage.highlighterTypeSize);
     if (localStorage.highlighterSelectionTreatment)
       config.selectionTreatment = localStorage.highlighterSelectionTreatment;
+    if (localStorage.highlighterShowLineNumbers)
+      config.showLineNumbers = localStorage.highlighterShowLineNumbers === '1';
     try {
       if (localStorage.customTheme)
         config.customTheme = JSON5.parse(localStorage.customTheme);
@@ -164,6 +171,8 @@ export function ConfigWrapper({ children }: PropsWithChildren) {
       if (p["size"]) config.typeSize = Number(p["size"]);
       if (p["sel"])
         config.selectionTreatment = p["sel"] as Config["selectionTreatment"];
+      if (p["ln"])
+        config.showLineNumbers = p["ln"] === "1";
     }
 
     setConfig(config);
